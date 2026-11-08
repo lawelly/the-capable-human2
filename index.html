@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Capable Human</title>
+<meta name="description" content="Gamified calisthenics skill tree: master skills, earn XP, complete weekly quests.">
+<meta name="theme-color" content="#060912">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Capable">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <header class="hud gut">
+    <div class="hex" aria-hidden="true"><svg viewBox="0 0 42 46"><path d="M21 2 39 12.5v21L21 44 3 33.5v-21z" fill="var(--panel)" stroke="var(--xp)" stroke-width="2"/></svg><small>LV</small><b id="lvl">1</b></div>
+    <div class="lvinfo"><div class="lvtop"><span class="rank" id="rank">Untrained</span><span class="xpn" id="xpn"></span></div><div class="xpbar"><i id="xpfill" style="width:0"></i></div></div>
+    <div class="flame" id="flame" title="Weeks in a row with 3+ training days"><svg viewBox="0 0 24 24"><path d="M12 2c1 4 5 5.5 5 11a5 5 0 0 1-10 0c0-2.5 1.2-4 2.5-5 0 2 1 3 2 3-1-3 .5-6 .5-9z" fill="currentColor"/></svg><span id="streak">0</span></div>
+    <button class="acct" id="acct" aria-label="Account and phone app"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button>
+  </header>
+
+  <main class="views">
+    <section class="view" id="mapview">
+      <div id="ov" class="view">
+        <div class="ovtop gut">
+          <div class="grow"><div><span>TREE GROWN</span><b id="growpct">0%</b></div><u><i id="growbar"></i></u></div>
+          <button class="sbtn" id="searchbtn" aria-label="Find a skill"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+        </div>
+        <div class="ovstage"><canvas id="spark"></canvas><svg id="tree" viewBox="0 0 400 560" role="group" aria-label="Skill tree"></svg></div>
+        <div class="cont gut"><h3>Next up</h3><div class="controw" id="controw"></div></div>
+      </div>
+      <div id="bv" class="view" hidden>
+        <div class="bvhead gut">
+          <button class="back" id="backbtn" aria-label="Back to the tree"><svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>Tree</button>
+          <div class="bvt" id="bvt"><div class="bvico" id="bvico"></div><div style="min-width:0"><strong id="bvname"></strong><span id="bvcount"></span></div></div>
+          <button class="iconbtn" id="bvfit" aria-label="Show whole limb"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        </div>
+        <div id="bvwrap"><div id="bvworld"><svg id="bvsvg"></svg></div><div class="hint" id="hint">Tap a skill for its guide · drag to move · pinch to zoom</div></div>
+      </div>
+    </section>
+    <section class="view" id="questview" hidden></section>
+    <section class="view" id="logview" hidden></section>
+    <section class="view" id="planview" hidden></section>
+  </main>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-v="map" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M12 22v-8M12 14l-5-5M12 14l5-5M12 11V5"/><circle cx="12" cy="4" r="2"/><circle cx="6" cy="8" r="2"/><circle cx="18" cy="8" r="2"/></svg>Tree</button>
+    <button role="tab" data-v="quest" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>Quests<span class="pip" id="qpip" hidden></span></button>
+    <button role="tab" data-v="log" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Log</button>
+    <button role="tab" data-v="plan" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M6 4h12v16H6z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Plan</button>
+  </nav>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" aria-label="Details"></aside>
+<div class="toast" id="toast" role="status"></div>
+<div class="lvup" id="lvup" role="dialog" aria-label="Level up"><div class="lvbox"><div class="big"><svg viewBox="0 0 42 46"><path d="M21 2 39 12.5v21L21 44 3 33.5v-21z" fill="var(--panel)" stroke="var(--xp)" stroke-width="1.5"/></svg><b id="lvbig">2</b></div><h5>LEVEL UP</h5><h6 id="lvrank">Initiate</h6><p id="lvnext"></p><button class="btn pri" id="lvok" style="margin-top:10px">Keep climbing</button></div></div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
