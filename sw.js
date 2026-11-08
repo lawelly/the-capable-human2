@@ -1,6 +1,6 @@
 /* Offline support: cache the app shell, serve it cache-first, refresh in the background.
    Bump VERSION whenever you deploy changes so phones pick up the new files. */
-const VERSION = 'tch-v1';
+const VERSION = 'tch-v2';
 const SHELL = ['./', 'index.html', 'css/style.css', 'js/firebase-config.js', 'js/sync.js', 'js/data.js', 'js/app.js',
   'manifest.webmanifest', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png'];
 
